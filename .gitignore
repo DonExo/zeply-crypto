@@ -1,0 +1,7 @@
+db.sqlite3
+zeply.db
+.venv
+.idea
+.env
+*.py[cod]
+**/__pycache__/
