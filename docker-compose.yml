@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  postgres_data: {}
+
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: web
+    user: "1000:1000"  # Trick to make the user owner of every produced file, instead of root
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      # Now obviously these would fit better in an .env file, but for the sake of the demo, let's just stick them here.
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+  db:
+    image: postgres
+    container_name: database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
