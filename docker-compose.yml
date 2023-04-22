@@ -9,7 +9,7 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     container_name: web
-    user: "1000:1000"  # Trick to make the user owner of every produced file, instead of root
+#    user: "1000:1000"  # Trick to make the user owner of every produced file, instead of root
     volumes:
       - .:/code
     ports:

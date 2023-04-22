@@ -5,3 +5,4 @@ zeply.db
 .env
 *.py[cod]
 **/__pycache__/
+.python-version
