@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from wallets.models import CryptoAddress
+
+@admin.register(CryptoAddress)
+class CryptoAddressAdmin(admin.ModelAdmin):
+    pass
