@@ -7,4 +7,4 @@ class CryptoAddressFactory(factory.django.DjangoModelFactory):
         model = CryptoAddress
 
     type = factory.Iterator(['BTC', 'ETH', 'LTC'])
-    address = factory.Sequence(lambda n: f"Generated {n}")
+    address = factory.Sequence(lambda n: f"Generated crypto address {n}")
