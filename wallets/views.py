@@ -19,7 +19,6 @@ class CryptoAddressListRetrieveView(mixins.ListModelMixin, mixins.RetrieveModelM
             if sort:
                 grouped_addresses = CryptoAddress.objects.values('type').annotate(count=Count('type')).order_by('type')
                 response_data = []
-
                 for group in grouped_addresses:
                     addresses = CryptoAddress.objects.filter(type=group['type'])
                     serializer = CryptoAddressListGroupedByTypeSerializer(
