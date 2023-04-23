@@ -40,7 +40,14 @@ class CryptoAddressCreateSerializer(serializers.ModelSerializer):
         return crypto_address
 
     @staticmethod
-    def _generate_bitcoin_litecoin_address(crypto_type):
+    def _generate_bitcoin_litecoin_address(crypto_type: str) -> CryptoAddress:
+        """
+        Utility function that creates a Bitcoin or Bitcoin-based address.
+        Uses the 'bitcoinlib' library that has support for Bitcoin, Litecoin and other bitcoin-based currencies.
+        It created (almost) unique wallet_name by using timestamp as part of the wallet name.
+        :param crypto_type: The type of cryptocurrency.
+        :return: The newly created internal CryptoAddress object.
+        """
         network = "testnet" if crypto_type == "BTC" else "litecoin_testnet"
         unique_name = "wallet_name_" + str(time.time())
         wallet = Wallet.create(unique_name,  network=network)
@@ -49,7 +56,13 @@ class CryptoAddressCreateSerializer(serializers.ModelSerializer):
         return crypto_address
 
     @staticmethod
-    def _generate_ethereum_address():
+    def _generate_ethereum_address() -> CryptoAddress:
+        """
+        Utility function that creates a Ethereum address.
+        It first creates a 32-bit hex random token then generates an Ethereum account of it.
+        Uses the 'web3' and 'eth-account' library that has support for Ethereum.
+        :return: The newly created internal CryptoAddress object.
+        """
         priv = secrets.token_hex(32)
         private_key = "0x" + priv
         account = Account.from_key(private_key)

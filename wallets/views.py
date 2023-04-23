@@ -9,9 +9,10 @@ from .serializers import CryptoAddressListRetrieveSerializer, CryptoAddressCreat
 class CryptoAddressListRetrieveView(mixins.ListModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
     queryset = CryptoAddress.objects.all()
     serializer_class = CryptoAddressListRetrieveSerializer
+    lookup_field = "id"
 
     def get(self, request, *args, **kwargs):
-        if 'pk' in kwargs:
+        if 'id' in kwargs:
             return self.retrieve(request, *args, **kwargs)
         else:
             # BONUS: Add sorting functionality in the LIST call.

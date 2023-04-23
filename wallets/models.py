@@ -14,6 +14,7 @@ class CryptoAddress(models.Model):
         # Add here more choices as needed
     )
 
+    # It was explicitly asked for the Primary Key to be an Integer ID, otherwise something like UUID is smarter choice.
     id = models.AutoField(primary_key=True)  # Make it explicit
     type = models.CharField(_("Crypto currency type"), max_length=10, choices=CRYPTO_CHOICES)
     address = models.CharField(_("Crypto currency address"), max_length=128)

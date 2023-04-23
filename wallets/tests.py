@@ -35,9 +35,9 @@ def test_list_sorted_crypto_addresses(client):
 @pytest.mark.django_db
 def test_retrieve_crypto_address_success(client):
     crypto_address = CryptoAddress.objects.first()
-    response = client.get(reverse('wallets:crypto_address_detail', kwargs={'pk': crypto_address.pk}))
+    response = client.get(reverse('wallets:crypto_address_detail', kwargs={'id': crypto_address.id}))
     assert response.status_code == 200
-    assert response.json()['id'] == crypto_address.pk
+    assert response.json()['id'] == crypto_address.id
 
 
 @pytest.mark.django_db
@@ -48,7 +48,7 @@ def test_retrieve_crypto_address_no_id_provided(client):
 
 @pytest.mark.django_db
 def test_retrieve_crypto_address_not_found(client):
-    response = client.get(reverse('wallets:crypto_address_detail', kwargs={'pk': 999}))
+    response = client.get(reverse('wallets:crypto_address_detail', kwargs={'id': 999}))
     assert response.json() == {'detail': 'Not found.'}
     assert response.status_code == 404
 
@@ -58,6 +58,14 @@ def test_create_crypto_address(client):
     response = client.post(reverse('wallets:crypto_address_create'), data={'type': 'BTC'})
     assert response.status_code == 201
     assert response.json()['type'] == 'BTC'
+    assert CryptoAddress.objects.all().count() == 5
+
+
+@pytest.mark.django_db
+def test_create_crypto_address_non_capitalized_ticker(client):
+    response = client.post(reverse('wallets:crypto_address_create'), data={'type': 'lTc'})
+    assert response.status_code == 201
+    assert response.json()['type'] == 'LTC'
     assert CryptoAddress.objects.all().count() == 5
 
 
