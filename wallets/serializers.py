@@ -36,7 +36,7 @@ class CryptoAddressCreateSerializer(serializers.ModelSerializer):
                 crypto_address = self._generate_ethereum_address()
             # Add here more 'cases' for different cryptocurrencies
             case _:
-                raise serializers.ValidationError("Invalid cryptocurrency ticket provided.")
+                raise serializers.ValidationError({"error": "Invalid cryptocurrency ticker provided."})
         return crypto_address
 
     @staticmethod
