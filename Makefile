@@ -31,6 +31,9 @@ shell:
 test:
 	docker compose run --rm web pytest
 
+coverage:
+	docker compose run --rm web pytest --cov
+
 bash:
 	docker compose run --rm web /bin/bash
 

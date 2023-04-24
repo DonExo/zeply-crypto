@@ -1,9 +1,36 @@
 # Zeply Test - Donald Dimitriovski
 
-# This is the repo for Zeply's coding assignment
+## Software stack
+Python 3.10 + Django 4.5 + Docker
 
+## Up and running
+In order to run this application it is preferred to have installed Docker and Compose.
 
-# Introduction
+### Via Docker (preferred and easiest)
+You can use regular `docker compose FOO` commands, or use the convenient "Make" shortcuts (see more in the Makefile)
+  - `make build` (`docker compose up --build`) - Builds and run the containers
+  - `make up` (`docker compose up`) - Runs the containers
+  - `make migrate` (`docker compose run --rm web python manage.py migrate`) - Migrates non migrated migrations
+  - Important - Above command needs running only the first time after finish building
+  - `make test` (`docker compose run --rm web pytest`) - Runs the existing test suit
+  - `make coverage` (`docker compose run --rm web pytest --cov`) - Runs the coverage report
+
+### Via regular `./manage.py` commands
+1. Make sure to have at least python3.10 version installed (if not, google `pyenv`)
+2. Create virtual environment (`python3.10 -m venv <venv-name>`)
+3. Activate the venv (`source <venv-name>/bin/activate`)
+4. Install the dependencies (`pip/pip3 install -r requirements.txt`)
+5. Important: 
+  - Find the DATABASE dict in "zeply-crypto/zeplycrypto/settings.py" and comment out lines 81-90
+  - In the same file, uncomment lines 92-97
+  - If server is run this way - we use local SQlite file as database, otherwise Posgres, hence above change.
+6. Run the migrations (`python manage.py migrate`)
+7. Run the Django server (`python manage.py runserver`)
+
+Either open browser (`http://127.0.0.1:8000/api/`) to use DRF's UI, or use tools like `curl` or Postman to send requests to the API.
+
+---
+# Assignment introduction
 The purpose of this code challenge is to assess your technical skills, namely, code structure,
 code quality, naming conventions, knowledge of commonly used frameworks, and overall
 problem-solving skills.

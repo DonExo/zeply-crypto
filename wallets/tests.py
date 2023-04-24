@@ -54,10 +54,18 @@ def test_retrieve_crypto_address_not_found(client):
 
 
 @pytest.mark.django_db
-def test_create_crypto_address(client):
+def test_create_crypto_address_bitcoin_success(client):
     response = client.post(reverse('wallets:crypto_address_create'), data={'type': 'BTC'})
     assert response.status_code == 201
     assert response.json()['type'] == 'BTC'
+    assert CryptoAddress.objects.all().count() == 5
+
+
+@pytest.mark.django_db
+def test_create_crypto_address_ethereum_success(client):
+    response = client.post(reverse('wallets:crypto_address_create'), data={'type': 'ETH'})
+    assert response.status_code == 201
+    assert response.json()['type'] == 'ETH'
     assert CryptoAddress.objects.all().count() == 5
 
 

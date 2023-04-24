@@ -6,3 +6,5 @@ zeply.db
 *.py[cod]
 **/__pycache__/
 .python-version
+.coverage
+coverage_re
