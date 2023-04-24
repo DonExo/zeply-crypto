@@ -4,19 +4,37 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='CryptoAddress',
+            name="CryptoAddress",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('BTC', 'Bitcoin'), ('ETH', 'Ethereum')], max_length=10, verbose_name='Crypto currency type')),
-                ('address', models.CharField(max_length=128, verbose_name='Crypto currency address')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("BTC", "Bitcoin"), ("ETH", "Ethereum")],
+                        max_length=10,
+                        verbose_name="Crypto currency type",
+                    ),
+                ),
+                (
+                    "address",
+                    models.CharField(
+                        max_length=128, verbose_name="Crypto currency address"
+                    ),
+                ),
             ],
         ),
     ]

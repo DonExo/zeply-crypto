@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('wallets', '0002_cryptoaddress_created_at_alter_cryptoaddress_id'),
+        ("wallets", "0002_cryptoaddress_created_at_alter_cryptoaddress_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='cryptoaddress',
-            name='type',
-            field=models.CharField(choices=[('BTC', 'Bitcoin'), ('ETH', 'Ethereum'), ('LTC', 'Litecoin')], max_length=10, verbose_name='Crypto currency type'),
+            model_name="cryptoaddress",
+            name="type",
+            field=models.CharField(
+                choices=[("BTC", "Bitcoin"), ("ETH", "Ethereum"), ("LTC", "Litecoin")],
+                max_length=10,
+                verbose_name="Crypto currency type",
+            ),
         ),
     ]

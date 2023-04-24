@@ -1,9 +1,11 @@
 from django.db.models import Count
-from rest_framework import mixins, generics
+from rest_framework import generics, mixins
 from rest_framework.response import Response
 
 from .models import CryptoAddress
-from .serializers import CryptoAddressListRetrieveSerializer, CryptoAddressCreateSerializer, CryptoAddressListGroupedByTypeSerializer
+from .serializers import (CryptoAddressCreateSerializer,
+                          CryptoAddressListGroupedByTypeSerializer,
+                          CryptoAddressListRetrieveSerializer)
 
 
 class CryptoAddressListRetrieveView(mixins.ListModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
