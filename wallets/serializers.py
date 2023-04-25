@@ -64,9 +64,6 @@ class CryptoAddressCreateSerializer(serializers.ModelSerializer):
         else:
             # If there isn't, create a new bitcoinlib wallet and CryptoWallet object, along with a valid address
             unique_name = f"wallet_{network}_" + str(time.time())
-            print(f'-----------------------------')
-            print(mnemonic, hashed_mnemonic)
-            print(f'-----------------------------')
             crypto_wallet = CryptoWallet.objects.create(wallet_name=unique_name, mnemonic=hashed_mnemonic)
             bitcoinlib_wallet = wallet_create_or_open(name=unique_name, keys=mnemonic, network=network)
             address = bitcoinlib_wallet.new_key().address

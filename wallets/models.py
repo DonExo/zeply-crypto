@@ -7,7 +7,7 @@ class CryptoWallet(models.Model):
     wallet_name = models.CharField(_("Wallet name"), max_length=128)
 
     def __str__(self):
-        return self.wallet_name
+        return self.wallet_name  # pragma: no cover
 
 
 class CryptoAddress(models.Model):
