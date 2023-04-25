@@ -2,6 +2,14 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+class CryptoWallet(models.Model):
+    mnemonic = models.CharField(max_length=256)
+    wallet_name = models.CharField(_("Wallet name"), max_length=128)
+
+    def __str__(self):
+        return self.wallet_name
+
+
 class CryptoAddress(models.Model):
     CHOICE_BTC = "BTC"
     CHOICE_ETH = "ETH"
@@ -20,6 +28,7 @@ class CryptoAddress(models.Model):
         _("Crypto currency type"), max_length=10, choices=CRYPTO_CHOICES
     )
     address = models.CharField(_("Crypto currency address"), max_length=128)
+    wallet = models.ForeignKey(CryptoWallet, on_delete=models.CASCADE, related_name="addresses", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
