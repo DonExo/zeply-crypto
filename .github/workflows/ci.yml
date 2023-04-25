@@ -29,10 +29,10 @@ jobs:
         run:  docker-compose build
 
       - name: Run DB Migrations
-        run:  docker-compose run --rm django python manage.py migrate
+        run:  docker-compose run --rm web python manage.py migrate
 
       - name: Run Django Tests
-        run:  docker-compose run django pytest
+        run:  docker-compose run web pytest
 
       - name: Tear down the Stack
         run:  docker-compose down
