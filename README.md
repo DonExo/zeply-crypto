@@ -1,7 +1,7 @@
 # Zeply Test - Donald Dimitriovski
 
 ## Software stack
-Python 3.10 + Django 4.5 + Docker
+Python 3.10 + Django 4.2 + Docker
 
 ## Up and running
 In order to run this application it is preferred to have installed Docker and Compose.
