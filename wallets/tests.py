@@ -1,16 +1,24 @@
 import pytest
 from django.urls import NoReverseMatch, reverse
 
+from freezegun import freeze_time
+
 from .factories import CryptoAddressFactory
-from .models import CryptoAddress
+from .models import CryptoAddress, CryptoWallet
 
 
 @pytest.fixture(autouse=True)
-def create_crypto_addresses():
-    # Use these 4 addresses as a seed
+def address_and_wallet_seed():
+    # Use these 4 addresses as a seed, this will also generate one single CryptoWallet associated with all these
     CryptoAddressFactory.create_batch(2, type="BTC")
     CryptoAddressFactory.create(type="ETH")
     CryptoAddressFactory.create(type="LTC")
+
+
+@pytest.fixture
+def crypto_mnemonic():
+    # Yeah, don't try to import this seed, it's a dummy one.
+    return "life scale blush moral timber cruise swap crazy worry ice route describe"
 
 
 @pytest.mark.django_db
@@ -57,30 +65,36 @@ def test_retrieve_crypto_address_not_found(client):
     assert response.status_code == 404
 
 
+@freeze_time("2022-01-01 01:01:01.0")  # Translates to '1640998861.0' in timestamp
 @pytest.mark.django_db
-def test_create_crypto_address_bitcoin_success(client):
+def test_create_crypto_address_bitcoin_success(client, crypto_mnemonic):
     response = client.post(
-        reverse("wallets:crypto_address_create"), data={"type": "BTC"}
+        reverse("wallets:crypto_address_create"), data={"type": "BTC", "mnemonic": crypto_mnemonic}
     )
     assert response.status_code == 201
     assert response.json()["type"] == "BTC"
     assert CryptoAddress.objects.all().count() == 5
+    assert CryptoWallet.objects.all().count() == 2  # This generated a new wallet alongside the address
+    assert CryptoWallet.objects.last().wallet_name == "wallet_testnet_1640998861.0"
 
 
+@freeze_time("2022-01-01 01:01:01.0")  # Translates to '1640998861.0' in timestamp
 @pytest.mark.django_db
 def test_create_crypto_address_ethereum_success(client):
     response = client.post(
-        reverse("wallets:crypto_address_create"), data={"type": "ETH"}
+        reverse("wallets:crypto_address_create"), data={"type": "ETH", "mnemonic": crypto_mnemonic}
     )
     assert response.status_code == 201
     assert response.json()["type"] == "ETH"
     assert CryptoAddress.objects.all().count() == 5
+    assert CryptoWallet.objects.all().count() == 2  # This generated a new wallet alongside the address
+    assert CryptoWallet.objects.last().wallet_name == "wallet_eth_1640998861.0"
 
 
 @pytest.mark.django_db
-def test_create_crypto_address_non_capitalized_ticker(client):
+def test_create_crypto_address_non_capitalized_ticker(client, crypto_mnemonic):
     response = client.post(
-        reverse("wallets:crypto_address_create"), data={"type": "lTc"}
+        reverse("wallets:crypto_address_create"), data={"type": "lTc", "mnemonic": crypto_mnemonic}
     )
     assert response.status_code == 201
     assert response.json()["type"] == "LTC"
@@ -92,12 +106,14 @@ def test_create_crypto_address_omit_type(client):
     response = client.post(reverse("wallets:crypto_address_create"), data={})
     assert response.status_code == 400
     assert response.json()["type"] == ["This field is required."]
+    assert CryptoWallet.objects.all().count() == 1  # This did not generate new wallet, this is the seeded one
 
 
 @pytest.mark.django_db
 def test_create_crypto_address_invalid_crypto_currency(client):
     response = client.post(
-        reverse("wallets:crypto_address_create"), data={"type": "foobar"}
+        reverse("wallets:crypto_address_create"), data={"type": "foobar", "mnemonic": crypto_mnemonic}
     )
     assert response.status_code == 400
     assert response.json()["error"] == "Invalid cryptocurrency ticker provided."
+    assert CryptoWallet.objects.count() == 1  # This did not generate new wallet, this is the seeded one
